@@ -1,6 +1,5 @@
-class State:
-    def __init__():
-        self.economy = 0
-        self.national_opinion = 0
-        self.elite_opinion = 0
-        self.international_tension = 0
+class Result:
+    economy = 0
+    national_opinion = 0
+    elite_opinion = 0
+    international_tension = 0

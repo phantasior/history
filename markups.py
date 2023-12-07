@@ -1,15 +1,12 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 
 from data import *
 
+
 def get_play_keyboard() -> ReplyKeyboardMarkup:
-    persons_keyboard = []
+    persons_keyboard = [[KeyboardButton(text=person)] for person in data["persons"]]
+    return ReplyKeyboardMarkup(keyboard=persons_keyboard, one_time_keyboard=True, resize_keyboard=True, is_persistent=True)
 
-    for person in data["persons"]:
-        button = KeyboardButton(text=person)
-        persons_keyboard.append(button)
-
-    return ReplyKeyboardMarkup(keyboard=[persons_keyboard], one_time_keyboard=True)
 
 def get_options_keyboard(n) -> ReplyKeyboardMarkup:
     options_keyboard = []
@@ -17,4 +14,4 @@ def get_options_keyboard(n) -> ReplyKeyboardMarkup:
         button = KeyboardButton(text=str(i + 1))
         options_keyboard.append(button)
 
-    return ReplyKeyboardMarkup(keyboard=[options_keyboard], one_time_keyboard=True)
+    return ReplyKeyboardMarkup(keyboard=[options_keyboard], one_time_keyboard=True, resize_keyboard=True, is_persistent=True)

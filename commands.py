@@ -1,10 +1,9 @@
 import os.path
 import random
 
-from aiogram import Bot, Dispatcher, Router, types, F
-from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart, Command, StateFilter
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, FSInputFile
+from aiogram import Dispatcher, F
+from aiogram.filters import CommandStart, Command
+from aiogram.types import Message, FSInputFile
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 
@@ -26,12 +25,12 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     response = f'''Привет, *{message.from_user.full_name}*!
 Ты попал в бота, в котором ты можешь принимать важные решения вместе с историческими деятелями России 20 века!
 
-Чтобы начать играть просто напиши /play'''
+Чтобы начать играть просто нажми Play'''
+    keyboard = [[KeyboardButton(text="Play")]]
+    await message.answer(response, reply_markup=ReplyKeyboardMarkup(keyboard=keyboard, one_time_keyboard=True, resize_keyboard=True, is_persistent=True))
 
-    await message.answer(response)
 
-
-@dp.message(Command('play'))
+@dp.message(lambda message: message.text.lower() == "play")
 async def play_handler(message: Message, state: FSMContext) -> None:
     await message.answer("Выбери персонажа:\n", reply_markup=get_play_keyboard())
     await state.set_state(OrderHistory.choosing_person)

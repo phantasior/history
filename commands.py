@@ -68,9 +68,11 @@ async def ask_question(message: Message, state: FSMContext):
     if user_data['action_i'] < len(person_data['actions']):
         action = person_data['actions'][user_data['action_i']]
 
-        text = f'''*{action["name"]}*
-{action["description"]}
-Ниже возможные исходы:'''
+        text = f'''
+        *{action["name"]}*
+        {action["description"]}
+        Ниже возможные исходы:
+        '''
         await message.answer(text)
         for i in range(len(action['options'])):
             await message.answer(f"{i + 1}. " + action['options'][i]["description"])
@@ -81,9 +83,27 @@ async def ask_question(message: Message, state: FSMContext):
     else:
         await print_result(message, state)
 
+async def get_result_message(state: FSMContext):
+    user_data = await state.get_data()
+    result = user_data['result']
+    total = result.economy + result.national_opinion + result.elite_opinion + result.international_tension
+    person = user_data['person']
+    person_data = data['persons'][person]
+    for result in person_data['results']:
+        if total <= result[0]:
+            return result[1], result[2]
+
+
+    return 'unexpected ending'
+
+
 
 async def print_result(message: Message, state: FSMContext):
-    await message.answer("Ты такой же гандон как и все деятели\nВыбирай следующего!", reply_markup=get_play_keyboard())
+    res, img = await get_result_message(state)
+    await message.answer(f"Супер! Вот что вышло:\n{res}")
+    photo = FSInputFile(os.path.join('src', img))
+    await bot.send_photo(message.from_user.id, photo)
+    await message.answer("Можешь выбрать следующего одного персонажа:\n", reply_markup=get_play_keyboard())
     await state.set_state(OrderHistory.choosing_person)
 
 

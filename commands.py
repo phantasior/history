@@ -134,30 +134,3 @@ async def question_answered_incorrect(message: Message, state: FSMContext):
     await message.answer("Прежде чем учить играть в историю, надо научиться считать")
     user_data = await state.get_data()
     await message.answer("Прими решение", reply_markup=get_options_keyboard(user_data['n_options']))
-
-# @dp.message()
-# async def message_handler(message: types.Message) -> None:
-#     for person in data["persons"]:
-#         if message.text == person["name"]:
-#             await hero_selector_handler(message, person)
-#             return
-#
-#
-# async def hero_selector_handler(message: types.Message, person: dict) -> None:
-#     text = f"Ты выбрал *{person['name']}*!\n" \
-#                 "Cейчас тебе предстоит принять важные решения вместе с выбранной личностью\n" \
-#                 "В конце игры ты сможешь узнать к чему привели твои выборы\n" \
-#                 "Удачи!"
-#     await message.answer(text)
-#
-#     text = "Давай для начала немного познакомимся с нашей личностью:\n" + person["description"]
-#     await message.answer(text)
-#
-#     photo = FSInputFile("./src/vitte.jpeg")
-#     await bot.send_photo(message.from_user.id, photo)
-#
-#     text = "Теперь начнем игру!"
-#     await message.answer(text)
-#
-#     state = State
-#     # я заебался
